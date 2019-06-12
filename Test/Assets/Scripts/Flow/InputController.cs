@@ -2,13 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum InputContollerState
+{
+    Building, Default
+}
+
 public class InputController : MonoBehaviour
 {
+    public PanAndZoom panAndZoom;
+
     public Grid grid;
 
     public BuildingController buildingController;
 
-    public int id;
+    public InputContollerState state = InputContollerState.Default;
+
+    private void Start()
+    {
+        panAndZoom.onStartTouch += CreateCheckRay;
+    }
 
     void Update()
     {
@@ -26,7 +38,13 @@ public class InputController : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
-        if (Physics.Raycast(ray, out hit)) ;
-            //buildingController.StartBuilding(id);
+        if (Physics.Raycast(ray, out hit))
+        {
+            GridObject gridObject = hit.transform.gameObject.GetComponent<GridObject>();
+            if (gridObject != null)
+            {
+                Debug.Log(gridObject);
+            }
+        }
     }
 }

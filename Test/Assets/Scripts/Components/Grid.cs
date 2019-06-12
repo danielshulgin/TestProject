@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
+    public PanAndZoom PanAndZoom;
+    public GameObject gridGameObject;
+    public GameObject groundGameObject;
+    public float groundOffset = 3f;
     [SerializeField]
     private int xLength;
     [SerializeField]
@@ -14,12 +18,11 @@ public class Grid : MonoBehaviour
 
     [SerializeField]
     private Material gridMaterial;
+    [SerializeField]
+    private Material groundMaterial;
 
     public GridCoordinates center;
-
     public GridObject[,] gridObjects;
-
-    public GameObject gridGameObject;
 
     void Start()
     {
@@ -28,8 +31,17 @@ public class Grid : MonoBehaviour
 
     private void Create()
     {
+        PanAndZoom.boundMaxX = XLength;
+        PanAndZoom.boundMaxY = YLength;
+        groundGameObject.transform.localScale = 
+            new Vector3(0.1f + groundOffset / xLength * 0.2f, 1f, 0.1f + groundOffset / yLength * 0.2f);
+        groundGameObject.transform.position = groundGameObject.transform.position
+            - new Vector3(groundOffset * 0.01f, 0f, groundOffset * 0.01f);
+
         gridGameObject.transform.localScale = new Vector3(XLength, 1f, YLength);
         gridMaterial.mainTextureScale = new Vector2(XLength, YLength);
+        groundMaterial.mainTextureScale = new Vector2(XLength + groundOffset * 2,
+            YLength + groundOffset * 2);
         gridObjects = new GridObject[XLength, YLength];
         center = new GridCoordinates(XLength / 2, YLength / 2);
     }
@@ -77,7 +89,8 @@ public class Grid : MonoBehaviour
 
     public bool GridCoordinatesExist(GridCoordinates gridPosition)
     {
-        return gridPosition.x < XLength && gridPosition.y < YLength;
+        return gridPosition.x < XLength && gridPosition.y < YLength 
+            && gridPosition.x >= 0 && gridPosition.y >= 0;
     }
 
     public Vector3 FromGridToWorldCoordinates(GridCoordinates gridCoordinates)
@@ -104,5 +117,28 @@ public class Grid : MonoBehaviour
             return true;
         }
         return false;
+    }
+    /// <summary>
+    /// Check grid object new coordinates updated with diff
+    /// </summary>
+    /// <param name="gridObject"></param>
+    /// <param name="updaetdCoordinates">grid object offset</param>
+    /// <returns></returns>
+    public bool CanPutObject(GridObject gridObject, GridCoordinates updaetdCoordinates)
+    {
+        for (int x = updaetdCoordinates.x;
+            x < gridObject.xLength + updaetdCoordinates.x; x++)
+        {
+            for (int y = updaetdCoordinates.y;
+                y < gridObject.yLength + updaetdCoordinates.y; y++)
+            {
+                if (x >= xLength || y >= yLength ||
+                    x < 0 || y < 0 || gridObjects[x, y] != null)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

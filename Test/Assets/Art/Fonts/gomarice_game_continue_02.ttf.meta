@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: dcc10e1e023699e478ccc74190fd7509
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Game Continue 02
+  fontNames:
+  - Game Continue 02
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 3b2fc4c0e6d6cad48a6258865305a9c7, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

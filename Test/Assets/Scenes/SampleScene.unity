@@ -866,14 +866,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 931a978bebc14954f8f044794d647c40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xLength: 10
-  yLength: 10
+  PanAndZoom: {fileID: 963194230}
+  gridGameObject: {fileID: 442365763}
+  groundGameObject: {fileID: 170688845}
+  groundOffset: 20
+  xLength: 20
+  yLength: 20
   CellSideLength: 1
   gridMaterial: {fileID: 2100000, guid: d745ccde701fd234e974d4e48f30b03b, type: 2}
+  groundMaterial: {fileID: 2100000, guid: 1877352829923c544b8080afcb704c78, type: 2}
   center:
     x: 0
     y: 0
-  gridGameObject: {fileID: 442365763}
 --- !u!4 &442365765
 Transform:
   m_ObjectHideFlags: 0
@@ -1052,7 +1056,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: -8.771199e-23, z: 4.86e-43, w: -7.6437163e-23}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -1448,8 +1452,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panAndZoom: {fileID: 963194230}
-  speed: 1
-  interpolation: 0.5
+  speed: 0.5
+  interpolation: 0.1
+  interpolationMinimumSpeed: 0.42
+  minSpeedToEnterInterpolation: 10
+  postInterpolationSpeed: 0.05
+  blockMovement: 0
 --- !u!1 &1258464170
 GameObject:
   m_ObjectHideFlags: 0
@@ -1765,7 +1773,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 442365764}
+  panAndZoom: {fileID: 963194230}
   buildingParent: {fileID: 170688845}
+  cameraMovementController: {fileID: 963194231}
+  buildingMoveSpeed: 1.13
+  buildingPosition: {x: 0, y: 0, z: 0}
   buildingPrefabs:
   - {fileID: 3703028547050875466, guid: 680a805cf6a0c884191d96686801397f, type: 3}
   - {fileID: 4219409236488881945, guid: a34f86ee77bc8fd4eaf800ba5f423473, type: 3}
@@ -1782,9 +1794,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17eb86eef9692664abd56f3bcabc5e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panAndZoom: {fileID: 963194230}
   grid: {fileID: 442365764}
   buildingController: {fileID: 1360112322}
-  id: 0
+  state: 0
 --- !u!4 &1360112324
 Transform:
   m_ObjectHideFlags: 0
@@ -1813,25 +1826,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingController: {fileID: 1360112322}
   grid: {fileID: 442365764}
-  filledPart: 0.458
+  filledPart: 0.103
   zones:
-  - xLength: 1
-    yLength: 10
+  - xLength: 4
+    yLength: 20
     position:
       x: 0
       y: 0
-  - xLength: 1
-    yLength: 10
+  - xLength: 4
+    yLength: 20
     position:
-      x: 9
+      x: 15
+      y: 0
+  - xLength: 12
+    yLength: 4
+    position:
+      x: 5
+      y: 16
+  - xLength: 12
+    yLength: 4
+    position:
+      x: 5
       y: 0
   itemsForGeneration:
-  - itemPref: {fileID: 3703028547050875466, guid: 680a805cf6a0c884191d96686801397f,
+  - itemPref: {fileID: 7378554956687573608, guid: 0ce3e554ecd39114bae074031c88573e,
       type: 3}
-    frequencyFactor: 3
-  - itemPref: {fileID: 4219409236488881945, guid: a34f86ee77bc8fd4eaf800ba5f423473,
+    frequencyFactor: 1
+  - itemPref: {fileID: 3130869426483688059, guid: daf0e6b3fa00ad94b95dbb7ad024e0be,
       type: 3}
-    frequencyFactor: 5
+    frequencyFactor: 9
+  - itemPref: {fileID: 1418671764316780784, guid: c6fa423940edd1a4290e1099736c898a,
+      type: 3}
+    frequencyFactor: 9
+  - itemPref: {fileID: 544049768792840967, guid: 20289d94c14e4384b92f2f8c190b874c,
+      type: 3}
+    frequencyFactor: 1
+  - itemPref: {fileID: 6107371996503489742, guid: 1f20e8c4dc8c30043bd521db07ee3de3,
+      type: 3}
+    frequencyFactor: 1
+  - itemPref: {fileID: 3119355247799639739, guid: baa6e5b144d282c44bfe7b0f7460a392,
+      type: 3}
+    frequencyFactor: 1
+  - itemPref: {fileID: 457464725361418626, guid: 93eb9827cc0bef648804bf29c2f86c7f,
+      type: 3}
+    frequencyFactor: 9
 --- !u!1 &1375832488
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1182576039700203034}
   - component: {fileID: 3903722709221560844}
+  - component: {fileID: 4283249292057336086}
+  - component: {fileID: 7175046328173896058}
   m_Layer: 0
   m_Name: BuildingTwo
   m_TagString: Untagged
@@ -45,10 +47,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0777bccb26ffc846a6e05c7b8669578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridPosition: {x: 0, y: 0}
+  gridPosition:
+    x: 9
+    y: 7
   xLength: 1
   yLength: 1
   id: 0
+--- !u!33 &4283249292057336086
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4219409236488881945}
+  m_Mesh: {fileID: 0}
+--- !u!65 &7175046328173896058
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4219409236488881945}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.88415194, y: 1.0872741, z: 0.7831354}
+  m_Center: {x: 0.49442816, y: 0.57547283, z: 0.5060184}
 --- !u!1 &5917753871661711682
 GameObject:
   m_ObjectHideFlags: 0

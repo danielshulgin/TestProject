@@ -12,13 +12,22 @@ public class BuildingController : MonoBehaviour
 {
     public Grid grid;
 
+    public PanAndZoom panAndZoom;
+
     public GameObject buildingParent;
+
+    public CameraMovementController cameraMovementController;
+
+    public float buildingMoveSpeed = 1f;
+    public Vector3 buildingPosition = Vector3.zero;
 
     public BuildingControllerState State { get; private set; }
 
     public List<GameObject> buildingPrefabs = new List<GameObject>();
 
     public GameObject inPrototype;
+
+    private bool touchOnPrototype = false;
 
     private int currentId;
 
@@ -35,7 +44,10 @@ public class BuildingController : MonoBehaviour
         {
             currentId = id;
             State = BuildingControllerState.InPrototype;
-
+            buildingPosition = grid.FromGridToWorldCoordinates((grid.center));
+            panAndZoom.onSwipe += MoveBuilding;
+            panAndZoom.onStartTouch += StartMoveBuilding;
+            panAndZoom.onEndTouch += EndMoveBuilding;
             CreatePrototype(selctedBuildingPref, grid.center);
         }
         else
@@ -56,6 +68,9 @@ public class BuildingController : MonoBehaviour
     public void EndBuilding()
     {
         State = BuildingControllerState.Disabled;
+        panAndZoom.onSwipe -= MoveBuilding;
+        panAndZoom.onStartTouch -= StartMoveBuilding;
+        panAndZoom.onEndTouch -= EndMoveBuilding;
         if (inPrototype != null)
         {
             Destroy(inPrototype);
@@ -77,7 +92,45 @@ public class BuildingController : MonoBehaviour
             building.transform.SetParent(buildingParent.transform);
             return building;
         }
-        Debug.Log("wrong coordinates or grid object size");
+        //TODO
+        //Debug.Log("wrong coordinates or grid object size");
         return null;
+    }
+
+    public void MoveBuilding(Vector2 diff)
+    {
+        if (touchOnPrototype)
+        {
+            Vector3 updatedBuildingPosition = buildingPosition 
+                + new Vector3(diff.x, 0f, diff.y) * buildingMoveSpeed * Time.deltaTime;
+            GridCoordinates updatedCoordinates = GridCoordinates.WorldToGridCoordinates(updatedBuildingPosition);
+            GridObject prototypeGridObject = inPrototype.GetComponent<GridObject>();
+            if (grid.CanPutObject(prototypeGridObject, updatedCoordinates))
+            {
+                prototypeGridObject.gridPosition = updatedCoordinates;
+                inPrototype.transform.position = grid.FromGridToWorldCoordinates(updatedCoordinates);
+                buildingPosition = updatedBuildingPosition;
+            }
+        }
+    }
+
+    public void StartMoveBuilding(Vector2 screenPosition)
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+        if (Physics.Raycast(ray, out hit))
+        {
+            if(hit.transform.gameObject == inPrototype)
+            {
+                cameraMovementController.blockMovement = true;
+                touchOnPrototype = true;
+            }
+        }
+    }
+
+    public void EndMoveBuilding(Vector2 screenPosition)
+    {
+        cameraMovementController.blockMovement = false;
+        touchOnPrototype = false;
     }
 }

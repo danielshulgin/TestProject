@@ -19,4 +19,9 @@ public class GridObject : MonoBehaviour
         this.yLength = yLength;
         this.id = id;
     }
+
+    public override string ToString()
+    {
+        return "id: " + id + " grid position: " + gridPosition + " name: " + name;
+    }
 }
